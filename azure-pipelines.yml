@@ -18,4 +18,5 @@ steps:
     stackName: 'vpc-eks'
     templateSource: 'file'
     templateFile: 'amazon-eks-vpc-private-subnets.yaml'
+    s3BucketName: 'mi-tfstate-bucket-unico-12345'
     capabilityAutoExpand: true
