@@ -30,6 +30,6 @@ steps:
     awsCredentials: 'AWSOps'
     regionName: 'us-east-1'
     stackName: 'vpc-eks'
-    templateSource: 'S3'
+    templateSource: 's3'
     s3BucketName: 'mi-tfstate-bucket-unico-12345'
     s3ObjectKey: 'AWSCF-ops-deploy/amazon-eks-vpc-private-subnets.yaml'
