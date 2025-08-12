@@ -17,6 +17,8 @@ variables:
 
 steps:
 - task: S3Upload@1
+  displayName: 'Upload file'
+  condition: and(succeeded(), not(contains(variables['Build.SourceVersionMessage'], 'destroy')))
   inputs:
     awsCredentials: $(credentials)
     regionName: $(region)
@@ -26,6 +28,8 @@ steps:
     targetFolder: 'AWSCF-ops-deploy'
 
 - task: CloudFormationCreateOrUpdateStack@1
+  displayName: 'Create'
+  condition: and(succeeded(), not(contains(variables['Build.SourceVersionMessage'], 'destroy')))
   inputs:
     awsCredentials: 'AWSOps'
     regionName: 'us-east-1'
@@ -33,3 +37,11 @@ steps:
     templateSource: 's3'
     s3BucketName: 'mi-tfstate-bucket-unico-12345'
     s3ObjectKey: 'AWSCF-ops-deploy/amazon-eks-vpc-private-subnets.yaml'
+
+- task: CloudFormationDeleteStack@1
+  displayName: 'Destroy'
+  condition: and(succeeded(), contains(variables['Build.SourceVersionMessage'], 'destroy'))
+  inputs:
+    awsCredentials: 'AWSOps'
+    regionName: 'us-east-1'
+    stackName: 'vpc-eks'
