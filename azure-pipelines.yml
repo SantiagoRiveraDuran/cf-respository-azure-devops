@@ -10,14 +10,26 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  credentials: 'AWSOps'
+  region: 'us-east-1'
+  bucket: 'mi-tfstate-bucket-unico-12345'
+
 steps:
+- task: S3Upload@1
+  inputs:
+    awsCredentials: $(credentials)
+    regionName: $(region)
+    bucketName: $(bucket)
+    sourceFolder: ''
+    globExpressions: '**'
+    targetFolder: 'AWSCF-ops-deploy'
+    createBucket: true
 - task: CloudFormationCreateOrUpdateStack@1
   inputs:
     awsCredentials: 'AWSOps'
     regionName: 'us-east-1'
     stackName: 'vpc-eks'
-    templateSource: 'file'
-    roleARN: 'arn:aws:iam::905418447403:role/devops-azure-role-cf'
-    templateFile: 'amazon-eks-vpc-private-subnets.yaml'
     s3BucketName: 'mi-tfstate-bucket-unico-12345'
+    s3ObjectKey: 'AWSCF-ops-deploy/amazon-eks-vpc-private-subnets.yaml'
     capabilityAutoExpand: true
