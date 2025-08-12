@@ -17,6 +17,7 @@ steps:
     regionName: 'us-east-1'
     stackName: 'vpc-eks'
     templateSource: 'file'
+    roleARN: 'arn:aws:iam::905418447403:role/devops-azure-role-cf'
     templateFile: 'amazon-eks-vpc-private-subnets.yaml'
     s3BucketName: 'mi-tfstate-bucket-unico-12345'
     capabilityAutoExpand: true
