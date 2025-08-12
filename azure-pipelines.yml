@@ -21,10 +21,9 @@ steps:
     awsCredentials: $(credentials)
     regionName: $(region)
     bucketName: $(bucket)
-    sourceFolder: ''
+    sourceFolder: 'source'
     globExpressions: '**'
     targetFolder: 'AWSCF-ops-deploy'
-    createBucket: true
 - task: CloudFormationCreateOrUpdateStack@1
   inputs:
     awsCredentials: 'AWSOps'
