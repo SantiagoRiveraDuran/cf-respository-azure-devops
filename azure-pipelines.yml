@@ -1,0 +1,34 @@
+# Starter pipeline
+
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  credentials: 'AWSOps'
+  region: 'us-east-1'
+  bucket: 'mi-tfstate-bucket-unico-12345'
+
+steps:
+- task: S3Upload@1
+  inputs:
+    awsCredentials: $(credentials)
+    regionName: $(region)
+    bucketName: $(bucket)
+    sourceFolder: 'source'
+    globExpressions: '**'
+    targetFolder: 'AWSCF-ops-deploy'
+- task: CloudFormationCreateOrUpdateStack@1
+  inputs:
+    awsCredentials: 'AWSOps'
+    regionName: 'us-east-1'
+    stackName: 'vpc-eks'
+    s3BucketName: 'mi-tfstate-bucket-unico-12345'
+    s3ObjectKey: 'AWSCF-ops-deploy/amazon-eks-vpc-private-subnets.yaml'
+    capabilityAutoExpand: true
